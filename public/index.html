@@ -96,14 +96,14 @@
                         <!-- Form Login -->
                         <div id="loginForm" class="form-section active">
                             <h3 class="text-center mb-4">Login</h3>
-                            <form>
+                            <form action="logar.php" method="post">
                                 <div class="mb-3">
                                     <label for="loginEmail" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="loginEmail" placeholder="Insira seu email">
+                                    <input type="email" class="form-control" name="email" id="loginEmail" placeholder="Insira seu email">
                                 </div>
                                 <div class="mb-3">
                                     <label for="loginPassword" class="form-label">Senha</label>
-                                    <input type="password" class="form-control" id="loginPassword" placeholder="Senha">
+                                    <input type="password" class="form-control" name="senha" id="loginPassword" placeholder="Senha">
                                 </div>
                                 <div class="d-grid gap-2">
                                     <button type="submit" class="btn btn-primary btn-block">Login <i class="fas fa-sign-in-alt"></i></button>

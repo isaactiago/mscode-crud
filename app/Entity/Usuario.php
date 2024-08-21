@@ -7,7 +7,7 @@ use \PDO;
 class Usuario
 {
 
-    private string $nome;
+    private PDO $pdo;
     private string $email;
     private string $senha;
    
@@ -24,16 +24,50 @@ class Usuario
         $this->pdo = $database->connection();
     }
 
-    public function cadastar(): bool
+    public function cadastar(string $tabela, string $nome, string $email, string $senha): bool
+    {
+       
+    }
+
+
+    public function login(string $tabela,string $colunas,string $coluna1,string $coluna2,string $email, string $senha): bool
     {
         try
         {
-            $sql = "INSERT INTO {$campos}" ;
-        }catch (\PDOExeption $e){
+         
+               
+                $senhaMD5 = md5($senha);
+                $sql = "SELECT {$colunas} FROM {$tabela} WHERE {$coluna1} = :email AND {$coluna2} = :senha";
 
-            echo "Erro ao inserir {$e->getMessage()}";
+                $stmt = $this->pdo->prepare($sql);
+                // Use bindParam para evitar injeção de SQL
+                $stmt->bindParam(':email', $email);
+                $stmt->bindParam(':senha', $senhaMD5);
+                $stmt->execute();
+
+                // Verifique se houve resultado
+                if ($stmt->rowCount() > 0) {
+                    // Obtenha os dados do usuário
+                    $dado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    // Inicie a sessão com o ID do usuário
+                    $_SESSION['idusuario'] = $dado['email'];
+
+                    return true;
+                } else {
+                    return false;
+                }
+        
+            
+
+        }catch (PDOExeption $e){
+
+            echo "Erro na consulta {$e->getMessage()}";
             return false;
         }
+        
+
+       
     }
 }
 
