@@ -24,30 +24,30 @@ class Query
      
     //select
 
-    public function select(string $tabela,string $condicao = null, string $colunas = "*"): false|array
-    {
-        try
-        {
-            $sql = "SELECT {$colunas} FROM {$tabela}";
 
-           
-
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute();
-         
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        
-        }catch (\PDOExeption $e){
-            echo "Erro na consulta {$e->getMessage()}";
-            return false;
-        }
-    }
 
 
     //insert
     public function insert(string $tabela, array $dados): false|int
     {
         try{
+
+            if (isset($dados['email'],) && isset($dados['senha'])) {
+                $email = $dados['email'];
+                $senha = $dados['senha'];
+                $sqlVerifica = "SELECT COUNT(*) FROM {$tabela} WHERE email = :email AND senha = :senha";
+                $stmtVerifica = $this->pdo->prepare($sqlVerifica);
+                $stmtVerifica->bindParam(':email', $email);
+                $stmtVerifica->bindParam(':senha', $senha);
+                $stmtVerifica->execute();
+    
+                //$stmtVerifica->fetchColumn() > 0 verifica se o e-mail já existe no banco de dados.
+                if ($stmtVerifica->fetchColumn() > 0) {
+                    $_SESSION['error'] = "usuario ja cadastradio";
+                    header('location:index.html');
+                    exit;
+                }
+            }
 
             //dados da query
             $campos = implode(',',array_keys($dados));
@@ -72,6 +72,26 @@ class Query
             return false;
         }
     }
+
+     //insert
+     public function update(string $tabela, array $dados,$condicao): bool
+     {
+        try{
+          /*   UPDATE
+            produtos
+            SET
+            descricao = 'Lápis preto (unid)'
+            WHERE
+            id = 2 */
+
+            $sql = "UPDATE {$tabela} SET ";
+
+        }catch (\PDOExeption $e)
+        {
+            echo "Erro ao editar {$e->getMessage()}";
+            return false;
+        }
+     }
  
 }
 

@@ -1,5 +1,5 @@
 <?php 
-
+session_start();
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -10,11 +10,6 @@ use App\Database\Query;
 
 $query = new Query();
 
-$dado = $query->select(
-    tabela : 'usuario',
-   
-
-);
 
 
 
@@ -43,7 +38,13 @@ if(isset($_POST['nome'], $_POST['email'],$_POST['senha']) && !empty($_POST['nome
         header('location:index.html');
         exit;
     }
-        
+
+
+    if(isset($_SESSION['erro']))
+    {
+        echo  $_SESSION['erro'];
+    }
+      
 
   
 
